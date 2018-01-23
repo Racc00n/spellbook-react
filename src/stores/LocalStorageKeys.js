@@ -1,0 +1,4 @@
+export const SPELL_LEVELS = 'SPELL_LEVELS';
+export const SPELL_CLASS = 'SPELL_CLASS';
+export const SPELL_META_DATAS = 'SPELL_META_DATAS';
+
