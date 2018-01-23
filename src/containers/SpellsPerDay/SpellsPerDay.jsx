@@ -2,21 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import * as SpellsActions from './../../stores/spells/SpellsActions';
 import * as SpellLevelsActions from './../../stores/spellLevels/SpellLevelsActions';
 import { mapToArray } from '../../utils/utils';
 import NumberPicker from './../../components/NumberPicker/NumberPicker';
 
 const styles = {
-  root: {
-    // backgroundColor: 'blue',
+  root: {    
     display: 'flex',
     flexDirection: 'column',
     height: '100vh',
     textAlign: ' center'
   },
   link: {
-    color: 'blue'
+    color: '#007bff'
   },
   title: {
     flex: '0 0 auto'  
@@ -24,15 +22,13 @@ const styles = {
   },
   content: {
     flex: '1 1 auto',
-    alignSelf: 'center'
+    alignItems: 'center',
+    justifyItems: 'space-around',
+    overflowX:'auto'
   }
 }
 
 class SpellsPerDay extends Component {
-
-  componentWillUnmount() {
-    this.props.onDestroy();
-  }
   
   renderHeaders() {
     return this.props.spellLevels.map(spellLevel => <th key={spellLevel.label}>{spellLevel.label}</th>);
@@ -95,8 +91,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     // onInit: ()=> dispatch(SpellsActions.fetchSpellClass()),
-    onChange: (spellLevel, value) => dispatch(SpellLevelsActions.updateSpellLevel(spellLevel.label, {numOfSpells: value})),
-    onDestroy: () => dispatch(SpellsActions.storeAll())
+    onChange: (spellLevel, value) => dispatch(SpellLevelsActions.updateSpellLevel(spellLevel.label, {numOfSpells: value}))
   };
 }
 

@@ -3,3 +3,13 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+select.custom-select {
+  width: initial;
+  color: #007bff;
+  font-weight: bold;
+}
+
+option {
+  font-weight: bold;
+}

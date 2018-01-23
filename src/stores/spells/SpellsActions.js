@@ -69,3 +69,14 @@ export const storeAll = () => {
     dispatch(SpellMetaDatasActions.storeSpellMetaDatas());
   }
 }
+export const replenishSpells = (spellMetaDatas) => ({
+  type: SpellsActionTypes.REPLENISH_SPELLS,
+  spellMetaDatas
+}) 
+
+export const replenish = () => {
+  return (dispatch, getState) => {
+    dispatch(SpellMetaDatasActions.replenishSpellMetaDatas());
+    dispatch(replenishSpells(getState().spellMetaDatas.spellMetaDatas));    
+  }
+}

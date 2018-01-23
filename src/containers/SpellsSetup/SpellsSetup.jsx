@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-
 import * as SpellsActions from './../../stores/spells/SpellsActions';
 import * as SpellLevelsActions from './../../stores/spellLevels/SpellLevelsActions';
 import * as SpellMetaDatasActions from './../../stores/spellMetaDatas/SpellMetaDatasActions';
@@ -17,7 +16,7 @@ const styles = {
     textAlign: ' center'
   },
   link: {
-    color: 'blue'
+    color: '#007bff'
   },
   title: {
     flex: '0 0 auto'      
@@ -28,16 +27,21 @@ const styles = {
   },
   known: {
     cursor: 'pointer',    
-    color: 'blue'
+    color: '#007bff'
+  },
+  alert: {
+    position: 'fixed',
+    bottom: 0,
+    right: 0,
+    left: 0,
+    margin: 0
   }
 }
 
 class SpellsSetup extends Component { 
-  
-  componentWillUnmount() {
-    this.props.onDestroy();
-  } 
- 
+  state = {
+    isReplenishClicked: false
+  }
   renderCells() {
     return this.props.spells.map(spell=> {
       return (
@@ -86,7 +90,23 @@ class SpellsSetup extends Component {
       );
     });    
   }
+  
+  renderReplenishAlert() {
+    if (this.state.isReplenishClicked){
+      return  <div style={styles.alert} className="alert alert-success" role="alert">All your spells have been replenished</div>    
+    } else {
+      return [];
+    }    
+  }
 
+  onReplenishClicked() {
+    this.setState({isReplenishClicked: true});      
+    setTimeout(()=> {
+      this.setState({isReplenishClicked: false});
+    }, 1500);
+    this.props.onReplenishClicked();    
+  }
+  
   render() {
     return (
       <div style={styles.root}>        
@@ -104,7 +124,11 @@ class SpellsSetup extends Component {
           <select className="custom-select" value={this.props.selectedSpellLevel} onChange={this.props.onSpellLevelChange}>              
             {this.renderSpellLevels()}
           </select>
-          {/* <button className="btn btn-success" click={this.props.onReplenishClicked()} >Replenish</button> */}
+          <button 
+            className="btn btn-success"
+            onClick={this.onReplenishClicked.bind(this)} 
+            disabled={this.state.isReplenishClicked}
+            >Replenish</button>
         </div>
         <div style={styles.content}>
           <table className="table">
@@ -128,7 +152,8 @@ class SpellsSetup extends Component {
               {this.renderCells()}              
             </tbody>
           </table>
-        </div>        
+        </div>
+        {this.renderReplenishAlert()}
       </div>
     )
   } 
@@ -149,14 +174,15 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {    
-    onSpellLevelChange: (event) => dispatch(SpellLevelsActions.updatedSelectedSpellLevel(event.target.value)),
-    onDestroy: () => dispatch(SpellsActions.storeAll()),
+    onSpellLevelChange: (event) => dispatch(SpellLevelsActions.updatedSelectedSpellLevel(event.target.value)),    
     onSpellKnownChange: (spell) => dispatch(SpellMetaDatasActions.updateSpellMetaData(spell.name, {...spell.metaData, known: !spell.metaData.known})),
     onSpellPreparedUsesChange: (spell,spellLevel, value) => {
       dispatch(SpellLevelsActions.updateSpellLevel(spellLevel.label,{ totalPrepared: spellLevel.totalPrepared + (value - spell.metaData.preparedUses) }))
       dispatch(SpellMetaDatasActions.updateSpellMetaData(spell.name, {...spell.metaData, preparedUses: value, remainingUses: value}))
+    },
+    onReplenishClicked: () => {        
+      dispatch(SpellsActions.replenish())
     }
-    // onReplenishClicked: () => dispatch(/*TODO: replenish*/)
   };
 }
 

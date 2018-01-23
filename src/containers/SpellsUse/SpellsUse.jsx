@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import * as SpellsActions from './../../stores/spells/SpellsActions';
 import * as SpellMetaDatasActions from './../../stores/spellMetaDatas/SpellMetaDatasActions';
 import { mapToArray } from '../../utils/utils';
 import MoreDetail from './../../components/MoreDetail/MoreDetail';
@@ -15,7 +14,7 @@ const styles = {
     textAlign: ' center'
   },
   link: {
-    color: 'blue'
+    color: '#007bff'
   },
   title: {
     flex: '0 0 auto'      
@@ -26,15 +25,19 @@ const styles = {
   },
   known: {
     cursor: 'pointer',    
-    color: 'blue'
+    color: '#007bff'
+  },
+  level: {
+    position: 'sticky',
+    top: 0,
+    right: 0,
+    left: 0
+
   }
 }
 
 class SpellsUse extends Component {   
-  componentWillUnmount() {
-    this.props.onDestroy();
-  } 
- 
+
   renderCells(spellLevel, spells) {
     return spells
     .map(spell => {
@@ -73,27 +76,31 @@ class SpellsUse extends Component {
       }
       
       return (
-        <table key={spellLevel.label} className="table">
-          <thead>
-            <tr className="thead-light">
-            <th>Remaining Uses</th>
-            <th>Cast</th>
-            <th>Name</th>
-            <th>Description(short)</th>
-            <th>School</th>
-            <th>Components</th>
-            <th>Casting Time</th>
-            <th>Range</th>
-            <th>Target/Effect/Area</th>
-            <th>Duration</th>
-            <th>Save</th>
-            <th>Spell Resistance</th>
-            </tr>
-          </thead>
-          <tbody>                           
-            {this.renderCells(spellLevel, filteredSpells)}              
-          </tbody>
-        </table>
+        <div key={spellLevel.label}>
+          <h2 className="alert-dark" style={styles.level}>Level {spellLevel.label} </h2>
+          <table  className="table">
+            <thead>
+              <tr className="thead-light">
+              <th>Remaining Uses</th>
+              <th>Cast</th>
+              <th>Name</th>
+              <th>Description(short)</th>
+              <th>School</th>
+              <th>Components</th>
+              <th>Casting Time</th>
+              <th>Range</th>
+              <th>Target/Effect/Area</th>
+              <th>Duration</th>
+              <th>Save</th>
+              <th>Spell Resistance</th>
+              </tr>
+            </thead>
+            <tbody>                           
+              {this.renderCells(spellLevel, filteredSpells)}              
+            </tbody>
+          </table>
+        </div>
+        
       );
     }
       
@@ -131,8 +138,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return {        
-    onDestroy: () => dispatch(SpellsActions.storeAll()),    
+  return {           
     castSpellClicked: (spell) => dispatch(SpellMetaDatasActions.updateSpellMetaData(spell.name, {...spell.metaData, remainingUses: (spell.metaData.remainingUses - 1)}))    
   };
 }

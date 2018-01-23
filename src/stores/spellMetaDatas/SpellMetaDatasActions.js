@@ -39,3 +39,7 @@ export const updateSpellMetaData = (id, spellMetaData) => ({
   spellMetaData,
   id
 })
+
+export const replenishSpellMetaDatas = () => ({
+  type: SpellMetaDatasActionTypes.REPLENISH_SPELL_META_DATAS
+})

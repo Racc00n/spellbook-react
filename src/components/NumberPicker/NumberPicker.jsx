@@ -10,7 +10,7 @@ const NumberPicker = ({min, max, value, disabled, change})=> {
       pointerEvents: 'none'
     },
     enabled: {
-      color: 'blue',
+      color: '#007bff',
       cursor: 'pointer'
     },
     span: {  

@@ -8,7 +8,13 @@ const initialState = {
   spells: {},
   spellClass: SpellClassEnum.sorcererWizard
 }
-
+const replenishSpells = (state, action) => {
+  const updatedSpells = {};
+  for (const id in action.spellMetaDatas){
+    updatedSpells[id] = {...state.spells[id], metaData: {...action.spellMetaDatas[id]}};
+  }
+  return {...state, spells: {...state.spells,...updatedSpells}}
+}
 
 const SpellsReducer = ( state=initialState, action )=> {
   switch(action.type) {
@@ -54,7 +60,10 @@ const SpellsReducer = ( state=initialState, action )=> {
           ...changedSpells
         }
       }
-    }    
+    }
+    
+    case SpellsActionTypes.REPLENISH_SPELLS: 
+      return replenishSpells(state, action);
 
     default:
       return state;

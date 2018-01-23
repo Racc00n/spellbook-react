@@ -11,7 +11,7 @@ import registerServiceWorker from './registerServiceWorker';
 import spellsReducer from './stores/spells/SpellsReducer';
 import spellLevelsReducer from './stores/spellLevels/SpellLevelsReducer';
 import spellMetaDatasReducer from './stores/spellMetaDatas/SpellMetaDatasReducer';
-
+import * as SpellsActions from './stores/spells/SpellsActions';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
@@ -34,3 +34,7 @@ const app = (
 
 ReactDOM.render( app, document.getElementById( 'root' ) );
 registerServiceWorker();
+
+window.addEventListener('beforeunload',()=> {
+  store.dispatch(SpellsActions.storeAll());
+})
